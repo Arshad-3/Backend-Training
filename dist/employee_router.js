@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const employee_entity_1 = __importDefault(require("./employee.entity"));
-const data_source_1 = __importDefault(require("./data-source"));
+const employee_entity_1 = __importDefault(require("./entities/employee.entity"));
+const data_source_1 = __importDefault(require("./db/data-source"));
 // import { Entity } from "typeorm";
 const employeeRouter = express_1.default.Router();
 let count = 2;
@@ -40,13 +40,13 @@ employeeRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, functio
     newEmployee.email = req.body.email;
     newEmployee.name = req.body.name;
     yield employeeRepository.insert(newEmployee);
-    res.status(200).send(newEmployee);
+    res.status(201).send(newEmployee);
 }));
 employeeRouter.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const empId = Number(req.params["id"]);
     const employeeRepository = data_source_1.default.getRepository(employee_entity_1.default);
     yield employeeRepository.delete({ id: empId });
-    res.status(200).send();
+    res.status(204).send();
 }));
 employeeRouter.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const empId = Number(req.params["id"]);
@@ -60,16 +60,13 @@ employeeRouter.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, funct
 employeeRouter.patch("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const empId = Number(req.params["id"]);
     const employeeRepository = data_source_1.default.getRepository(employee_entity_1.default);
-    const employee = yield employeeRepository.findOneBy({ id: empId });
     if (req.body.name) {
-        employee.name = req.body.name;
-        yield employeeRepository.save(employee);
+        yield employeeRepository.update(empId, { name: req.body.name });
     }
     else if (req.body.email) {
-        employee.email = req.body.email;
-        yield employeeRepository.save(employee);
+        yield employeeRepository.update(empId, { email: req.body.email });
     }
-    res.status(200).send(employee);
+    res.status(200).send(yield employeeRepository.findOneBy({ id: empId }));
 }));
 exports.default = employeeRouter;
 //# sourceMappingURL=employee_router.js.map

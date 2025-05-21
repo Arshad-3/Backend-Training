@@ -13,20 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const employee_router_1 = __importDefault(require("./employee_router"));
+const employee_route_1 = __importDefault(require("./routes/employee.route"));
 const loggerMiddleware_1 = __importDefault(require("./loggerMiddleware"));
-const data_source_1 = __importDefault(require("./data-source"));
+const data_source_1 = __importDefault(require("./db/data-source"));
 const processTimeMiddleware_1 = __importDefault(require("./processTimeMiddleware"));
+const error_middleware_1 = __importDefault(require("./middlewares/error.middleware"));
 const server = (0, express_1.default)();
 server.use(express_1.default.json());
 server.use(loggerMiddleware_1.default);
 server.use(processTimeMiddleware_1.default);
-server.use("/employee", employee_router_1.default);
+server.use("/employees", employee_route_1.default);
+server.use(error_middleware_1.default);
 server.get("/", (req, res) => {
-    console.log(req.url);
-    res.status(200).send("Hello world typescript");
+    res.status(200).send("hi");
 });
-(() => __awaiter(void 0, void 0, void 0, function* () {
+const init = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield data_source_1.default.initialize();
         console.log("connected to database training");
@@ -38,5 +39,6 @@ server.get("/", (req, res) => {
     server.listen(3000, () => {
         console.log("server listening to 3000");
     });
-}))();
+});
+init();
 //# sourceMappingURL=app.js.map
