@@ -9,26 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateAddressDto = void 0;
+exports.CreateDepartmentDto = void 0;
 const class_validator_1 = require("class-validator");
-class CreateAddressDto {
+class CreateDepartmentDto {
 }
-exports.CreateAddressDto = CreateAddressDto;
+exports.CreateDepartmentDto = CreateDepartmentDto;
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateAddressDto.prototype, "line2", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CreateAddressDto.prototype, "house_no", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CreateAddressDto.prototype, "line1", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsInt)(),
-    __metadata("design:type", Number)
-], CreateAddressDto.prototype, "pincode", void 0);
-//# sourceMappingURL=create-address.dto.js.map
+], CreateDepartmentDto.prototype, "name", void 0);
+//# sourceMappingURL=create-department.dto.js.map

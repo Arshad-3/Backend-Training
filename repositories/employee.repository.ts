@@ -11,7 +11,8 @@ class EmployeeRepository {
     async findAll(): Promise<Employee[]> {
         return this.repository.find({
             relations: {
-                address:true
+                address:true,
+                department:true
             }
         });
     }

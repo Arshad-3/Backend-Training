@@ -9,67 +9,65 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateEmployeeDto = void 0;
+exports.UpdateEmployeeDto = void 0;
 const class_validator_1 = require("class-validator");
-const class_transformer_1 = require("class-transformer");
-const create_address_dto_1 = require("./create-address.dto");
 const employee_entity_1 = require("../entities/employee.entity");
-class CreateEmployeeDto {
+class UpdateEmployeeDto {
 }
-exports.CreateEmployeeDto = CreateEmployeeDto;
+exports.UpdateEmployeeDto = UpdateEmployeeDto;
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
-], CreateEmployeeDto.prototype, "email", void 0);
+], UpdateEmployeeDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateEmployeeDto.prototype, "name", void 0);
+], UpdateEmployeeDto.prototype, "name", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
-], CreateEmployeeDto.prototype, "age", void 0);
+], UpdateEmployeeDto.prototype, "age", void 0);
 __decorate([
-    (0, class_validator_1.ValidateNested)(),
-    (0, class_transformer_1.Type)(() => create_address_dto_1.CreateAddressDto),
-    __metadata("design:type", create_address_dto_1.CreateAddressDto)
-], CreateEmployeeDto.prototype, "address", void 0);
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], UpdateEmployeeDto.prototype, "address_id", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(5),
     __metadata("design:type", String)
-], CreateEmployeeDto.prototype, "password", void 0);
+], UpdateEmployeeDto.prototype, "password", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsEnum)(employee_entity_1.EmployeeRole),
     __metadata("design:type", String)
-], CreateEmployeeDto.prototype, "role", void 0);
+], UpdateEmployeeDto.prototype, "role", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsEnum)(employee_entity_1.EmployeeStatus),
     __metadata("design:type", String)
-], CreateEmployeeDto.prototype, "status", void 0);
+], UpdateEmployeeDto.prototype, "status", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
-], CreateEmployeeDto.prototype, "experience", void 0);
+], UpdateEmployeeDto.prototype, "experience", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Date)
-], CreateEmployeeDto.prototype, "joiningDate", void 0);
+], UpdateEmployeeDto.prototype, "joiningDate", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateEmployeeDto.prototype, "employeeID", void 0);
+], UpdateEmployeeDto.prototype, "employeeID", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
-], CreateEmployeeDto.prototype, "department_id", void 0);
-//# sourceMappingURL=create-employee.dto.js.map
+], UpdateEmployeeDto.prototype, "department_id", void 0);
+//# sourceMappingURL=update-employee.dto.js.map

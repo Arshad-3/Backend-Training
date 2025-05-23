@@ -21,12 +21,14 @@ const error_middleware_1 = __importDefault(require("./middlewares/error.middlewa
 const auth_route_1 = __importDefault(require("./routes/auth.route"));
 const auth_middleware_1 = __importDefault(require("./middlewares/auth.middleware"));
 const logger_service_1 = require("./services/logger.service");
+const department_route_1 = __importDefault(require("./routes/department.route"));
 const server = (0, express_1.default)();
 const logger = logger_service_1.LoggerService.getInstance("app()");
 server.use(express_1.default.json());
 server.use(loggerMiddleware_1.default);
 server.use(processTimeMiddleware_1.default);
 server.use("/employees", auth_middleware_1.default, employee_route_1.default);
+server.use("/department", auth_middleware_1.default, department_route_1.default);
 server.use("/auth", auth_route_1.default);
 server.use(error_middleware_1.default);
 server.get("/", (req, res) => {

@@ -13,52 +13,93 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const department_entity_1 = __importDefault(require("../entities/department.entity"));
+const http_exception_1 = __importDefault(require("../exceptions/http.exception"));
+const employee_route_1 = require("../routes/employee.route");
+const logger_service_1 = require("./logger.service");
 class DepartmentService {
     constructor(departmentRepository) {
         this.departmentRepository = departmentRepository;
+        this.logger = logger_service_1.LoggerService.getInstance(DepartmentService.name);
     }
-    createDepartment(name, employees) {
+    createDepartment(name) {
         return __awaiter(this, void 0, void 0, function* () {
             const department = new department_entity_1.default();
             department.name = name;
-            department.employees = employees;
+            department.employees = [];
+            this.logger.info("department created");
             return this.departmentRepository.create(department);
         });
     }
     getAllDepartments() {
         return __awaiter(this, void 0, void 0, function* () {
+            this.logger.info("departments returned");
             return this.departmentRepository.findAll();
         });
     }
     getEmployeesByDepartmentID(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const existingDepartment = yield this.departmentRepository.findOneByID(id);
-            if (existingDepartment) {
-                return this.departmentRepository.findOneByID(id);
+            if (!existingDepartment) {
+                this.logger.error("department not found");
+                throw new http_exception_1.default(400, "department not found");
             }
+            return this.departmentRepository.findOneByID(id);
         });
     }
-    addEmployeeToDepartmentByID(id, employee) {
+    addEmployeeToDepartmentByID(id, employeeid) {
         return __awaiter(this, void 0, void 0, function* () {
             const department = yield this.departmentRepository.findOneByID(id);
+            if (!department) {
+                this.logger.error("department does not exist");
+                throw new http_exception_1.default(400, "Department does not exist");
+            }
+            const employee = yield employee_route_1.employeeService.getEmployeeByID(employeeid);
+            yield employee_route_1.employeeService.updateEmployeeDepartment(employeeid, department);
             department.employees.push(employee);
-            return this.departmentRepository.findOneByID(id);
+            yield this.departmentRepository.update(id, department);
+            this.logger.info("employee added to department");
+        });
+    }
+    removeEmployeeFromDepartmentByID(id, employeeid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const department = yield this.departmentRepository.findOneByID(id);
+            if (!department) {
+                this.logger.error("department does not exist");
+                throw new http_exception_1.default(400, "Department does not exist");
+            }
+            const employee = yield employee_route_1.employeeService.getEmployeeByID(employeeid);
+            if (!department.employees.includes(employee)) {
+                this.logger.error("employee not in department");
+                throw new http_exception_1.default(400, "employee not found in department");
+            }
+            const i = department.employees.indexOf(employee);
+            department.employees.splice(i, 1);
+            yield this.departmentRepository.update(id, department);
+            yield employee_route_1.employeeService.updateEmployeeDepartment(employeeid, null);
+            this.logger.info("employee removed from department");
         });
     }
     deleteDepartment(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            const department = yield this.departmentRepository.findOneByID(id);
+            if (!department) {
+                this.logger.error("department does not exist");
+                throw new http_exception_1.default(400, "Department does not exist");
+            }
             yield this.departmentRepository.delete(id);
+            this.logger.info("department deleted");
         });
     }
-    updateDepartment(id, name, employees) {
+    updateDepartment(id, name) {
         return __awaiter(this, void 0, void 0, function* () {
             const existingDepartment = yield this.departmentRepository.findOneByID(id);
-            if (existingDepartment) {
-                const department = new department_entity_1.default();
-                department.name = name;
-                department.employees = employees;
-                yield this.departmentRepository.update(id, department);
+            if (!existingDepartment) {
+                this.logger.error("department does not exist");
+                throw new http_exception_1.default(400, "Department does not exist");
             }
+            existingDepartment.name = name;
+            yield this.departmentRepository.update(id, existingDepartment);
+            this.logger.info("department updated");
         });
     }
 }

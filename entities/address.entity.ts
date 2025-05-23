@@ -14,12 +14,21 @@ class Address extends AbstractEntity{
     id: number;
 
     @Column()
+    houseNo : string
+
+    @Column()
     line1: string;
+
+    @Column()
+    line2: string
 
     @Column()
     pincode: number;
 
-    @OneToOne(()=> Employee , (employee) => employee.address)
+    @OneToOne(()=> Employee , (employee) => employee.address , {
+        onDelete: 'CASCADE'
+    })
+    @JoinColumn()
     employee:Employee
 
 }

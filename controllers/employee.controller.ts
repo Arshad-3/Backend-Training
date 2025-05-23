@@ -14,11 +14,10 @@ class EmployeeController {
         router.get("/", this.getAllEmployees.bind(this));
         router.get("/:id", this.getEmployeeByID.bind(this));
         router.delete("/:id",checkRole([EmployeeRole.HR]), this.deleteEmployee);
-        router.put("/:id", checkRole([EmployeeRole.HR,EmployeeRole.UI]),this.updateEmployee);
+        router.put("/:id",checkRole([EmployeeRole.HR]), this.updateEmployee);
     }
 
     async getAllEmployees(req: Request, res: Response) {
-        console.log(req.user)
         const e: Employee[] = await this.employeeService.getAllEmployees();
         res.status(200).send(e);
     }
@@ -56,7 +55,12 @@ class EmployeeController {
                 createEmployeeDto.age,
                 createEmployeeDto.address,
                 createEmployeeDto.password,
-                createEmployeeDto.role
+                createEmployeeDto.role,
+                createEmployeeDto.employeeID,
+                createEmployeeDto.experience,
+                createEmployeeDto.joiningDate,
+                createEmployeeDto.status,
+                createEmployeeDto.department_id
             );
 
             res.status(201).send(e);
@@ -91,7 +95,12 @@ class EmployeeController {
                 updateEmployeeDto.age,
                 updateEmployeeDto.address,
                 updateEmployeeDto.password,
-                updateEmployeeDto.role
+                updateEmployeeDto.role,
+                updateEmployeeDto.employeeID,
+                updateEmployeeDto.experience,
+                updateEmployeeDto.joiningDate,
+                updateEmployeeDto.status,
+                updateEmployeeDto.department_id
             );
 
             res.status(200).send();

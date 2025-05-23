@@ -1,10 +1,12 @@
 import {
     Column,
+    CreateDateColumn,
     Entity,
     JoinColumn,
     ManyToOne,
     OneToOne,
-    PrimaryGeneratedColumn
+    PrimaryGeneratedColumn,
+    Timestamp
 } from "typeorm";
 import AbstractEntity from "./abstract.entity";
 import Address from "./address.entity";
@@ -17,10 +19,19 @@ export enum EmployeeRole {
     HR = 'HR'
 }
 
+export enum EmployeeStatus {
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE",
+    PROBATION = "PROBATION"
+}
+
 @Entity()
 class Employee extends AbstractEntity {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column({unique:true})
+    employeeID : string
 
     @Column({ unique: true })
     email: string;
@@ -31,11 +42,18 @@ class Employee extends AbstractEntity {
 	@Column()
 	age:number
 
+    @Column()
+    experience: number
+
+    @Column({type:'enum' , enum: EmployeeStatus , default:EmployeeStatus.INACTIVE})
+    status : EmployeeStatus
+
+    @Column({type:"date"})
+    joiningDate: Date
+
 	@OneToOne(() => Address , (address) => address.employee , {
-		cascade:true,
-		onDelete: 'CASCADE'
+		cascade:true
 	})
-	@JoinColumn()
 	address : Address
 
     @ManyToOne(()=> Department , (address) => address.employees)

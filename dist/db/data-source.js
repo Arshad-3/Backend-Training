@@ -13,7 +13,7 @@ const datasource = new typeorm_1.DataSource({
     host: "localhost",
     port: 5432,
     database: "training",
-    username: process.env.DB_USNAME,
+    username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     extra: { max: 5, min: 2 },
     synchronize: false,

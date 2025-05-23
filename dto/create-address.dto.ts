@@ -3,6 +3,12 @@ import { Type } from "class-transformer";
 
 export class CreateAddressDto {
   @IsNotEmpty()
+  line2: string;
+
+  @IsNotEmpty()
+  house_no: string
+
+  @IsNotEmpty()
   line1: string;
 
   @IsNotEmpty()
