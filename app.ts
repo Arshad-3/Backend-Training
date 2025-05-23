@@ -4,32 +4,38 @@ import loggerMiddleware from "./loggerMiddleware";
 import datasource from "./db/data-source";
 import processTimeMiddleware from "./processTimeMiddleware";
 import errorMiddleware from "./middlewares/error.middleware";
+import authRouter from "./routes/auth.route";
+import authMiddleware from "./middlewares/auth.middleware";
+import { LoggerService } from "./services/logger.service";
 
 const server = express();
+const logger = LoggerService.getInstance("app()");
+
 server.use(express.json());
 server.use(loggerMiddleware);
-server.use(processTimeMiddleware)
+server.use(processTimeMiddleware);
 
+server.use("/employees", authMiddleware, employeeRouter);
+server.use("/auth", authRouter);
+server.use(errorMiddleware);
 
-server.use("/employees", employeeRouter);
-server.use(errorMiddleware)
-
-server.get("/" , (req,res) => {
-  res.status(200).send("hi")
-})
+server.get("/", (req, res) => {
+    res.status(200).send("hi");
+});
 
 const init = async () => {
-  try {
-    await datasource.initialize();
-    console.log("connected to database training");
-  } catch {
-    console.error("Failed to connect");
-    process.exit(1);
-  }
+    console.log("starting app.ts");
+    try {
+        await datasource.initialize();
+        logger.info("connected to database training");
 
-  server.listen(3000, () => {
-    console.log("server listening to 3000");
-  });
-}
+        server.listen(3000, () => {
+            logger.info("server listening to 3000");
+        });
+    } catch {
+        logger.error("Failed to connect");
+        process.exit(1);
+    }
+};
 
 init();

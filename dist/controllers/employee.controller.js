@@ -12,10 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const employee_entity_1 = require("../entities/employee.entity");
 const http_exception_1 = __importDefault(require("../exceptions/http.exception"));
 const create_employee_dto_1 = require("../dto/create-employee.dto");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
+const authorization_middleware_1 = require("../middlewares/authorization.middleware");
 class EmployeeController {
     constructor(employeeService, router) {
         this.employeeService = employeeService;
@@ -32,7 +34,7 @@ class EmployeeController {
                     throw new http_exception_1.default(404, JSON.stringify(errors));
                 }
                 const id = Number(req.params.id);
-                yield this.employeeService.updateEmployee(id, updateEmployeeDto.name, updateEmployeeDto.email, updateEmployeeDto.age, updateEmployeeDto.address);
+                yield this.employeeService.updateEmployee(id, updateEmployeeDto.name, updateEmployeeDto.email, updateEmployeeDto.age, updateEmployeeDto.address, updateEmployeeDto.password, updateEmployeeDto.role);
                 res.status(200).send();
             }
             catch (err) {
@@ -40,14 +42,15 @@ class EmployeeController {
                 next(err);
             }
         });
-        router.post("/", this.createEmployee.bind(this));
+        router.post("/", (0, authorization_middleware_1.checkRole)([employee_entity_1.EmployeeRole.HR, employee_entity_1.EmployeeRole.UI]), this.createEmployee.bind(this));
         router.get("/", this.getAllEmployees.bind(this));
         router.get("/:id", this.getEmployeeByID.bind(this));
-        router.delete("/:id", this.deleteEmployee);
-        router.put("/:id", this.updateEmployee);
+        router.delete("/:id", (0, authorization_middleware_1.checkRole)([employee_entity_1.EmployeeRole.HR]), this.deleteEmployee);
+        router.put("/:id", (0, authorization_middleware_1.checkRole)([employee_entity_1.EmployeeRole.HR, employee_entity_1.EmployeeRole.UI]), this.updateEmployee);
     }
     getAllEmployees(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(req.user);
             const e = yield this.employeeService.getAllEmployees();
             res.status(200).send(e);
         });
@@ -76,7 +79,7 @@ class EmployeeController {
                     console.log(JSON.stringify(errors));
                     throw new http_exception_1.default(400, JSON.stringify(errors));
                 }
-                const e = yield this.employeeService.createEmployee(createEmployeeDto.name, createEmployeeDto.email, createEmployeeDto.age, createEmployeeDto.address);
+                const e = yield this.employeeService.createEmployee(createEmployeeDto.name, createEmployeeDto.email, createEmployeeDto.age, createEmployeeDto.address, createEmployeeDto.password, createEmployeeDto.role);
                 res.status(201).send(e);
             }
             catch (err) {

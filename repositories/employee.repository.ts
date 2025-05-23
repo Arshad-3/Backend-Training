@@ -16,6 +16,10 @@ class EmployeeRepository {
         });
     }
 
+    async findOneByEmail(email:string) : Promise<Employee | null> {
+        return this.repository.findOneBy({email})
+    }
+
     async findOneByID(id: number): Promise<Employee> {
         return this.repository.findOne({where : {id},relations:{address:true}});
     }

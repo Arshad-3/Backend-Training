@@ -27,6 +27,11 @@ class EmployeeRepository {
             });
         });
     }
+    findOneByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.repository.findOneBy({ email });
+        });
+    }
     findOneByID(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.repository.findOne({ where: { id }, relations: { address: true } });

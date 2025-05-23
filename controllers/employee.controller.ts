@@ -1,22 +1,24 @@
 import { Request, Response, Router, NextFunction } from "express";
-import Employee from "../entities/employee.entity";
+import Employee, { EmployeeRole } from "../entities/employee.entity";
 import EmployeeService from "../services/employee.service";
 import httpException from "../exceptions/http.exception";
 import { isEmail } from "../validators/email.validator";
 import { CreateEmployeeDto } from "../dto/create-employee.dto";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
+import {checkRole } from "../middlewares/authorization.middleware";
 
 class EmployeeController {
     constructor(private employeeService: EmployeeService, router: Router) {
-        router.post("/", this.createEmployee.bind(this));
+        router.post("/",checkRole([EmployeeRole.HR,EmployeeRole.UI]), this.createEmployee.bind(this));
         router.get("/", this.getAllEmployees.bind(this));
         router.get("/:id", this.getEmployeeByID.bind(this));
-        router.delete("/:id", this.deleteEmployee);
-        router.put("/:id", this.updateEmployee);
+        router.delete("/:id",checkRole([EmployeeRole.HR]), this.deleteEmployee);
+        router.put("/:id", checkRole([EmployeeRole.HR,EmployeeRole.UI]),this.updateEmployee);
     }
 
     async getAllEmployees(req: Request, res: Response) {
+        console.log(req.user)
         const e: Employee[] = await this.employeeService.getAllEmployees();
         res.status(200).send(e);
     }
@@ -52,7 +54,9 @@ class EmployeeController {
                 createEmployeeDto.name,
                 createEmployeeDto.email,
                 createEmployeeDto.age,
-                createEmployeeDto.address
+                createEmployeeDto.address,
+                createEmployeeDto.password,
+                createEmployeeDto.role
             );
 
             res.status(201).send(e);
@@ -85,7 +89,9 @@ class EmployeeController {
                 updateEmployeeDto.name,
                 updateEmployeeDto.email,
                 updateEmployeeDto.age,
-                updateEmployeeDto.address
+                updateEmployeeDto.address,
+                updateEmployeeDto.password,
+                updateEmployeeDto.role
             );
 
             res.status(200).send();

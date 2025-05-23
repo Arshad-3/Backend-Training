@@ -10,6 +10,13 @@ import AbstractEntity from "./abstract.entity";
 import Address from "./address.entity";
 import Department from "./department.entity";
 
+export enum EmployeeRole {
+    UI = 'UI',
+    UX = 'UX',
+    DEVELOPER = 'DEVELOPER',
+    HR = 'HR'
+}
+
 @Entity()
 class Employee extends AbstractEntity {
     @PrimaryGeneratedColumn()
@@ -32,9 +39,16 @@ class Employee extends AbstractEntity {
 	address : Address
 
     @ManyToOne(()=> Department , (address) => address.employees)
-    @JoinColumn()
     department : Department
 
+    @Column()
+    password:string
+
+    @Column({type:'enum',
+        enum:EmployeeRole,
+        default: EmployeeRole.DEVELOPER
+    })
+    role:EmployeeRole
 }
 
 export default Employee;

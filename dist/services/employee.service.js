@@ -14,9 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const employee_entity_1 = __importDefault(require("../entities/employee.entity"));
 const address_entity_1 = __importDefault(require("../entities/address.entity"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const http_exception_1 = __importDefault(require("../exceptions/http.exception"));
 class EmployeeService {
     constructor(employeeRepository) {
         this.employeeRepository = employeeRepository;
+    }
+    getEmployeeByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.employeeRepository.findOneByEmail(email);
+        });
     }
     getAllEmployees() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -25,10 +32,14 @@ class EmployeeService {
     }
     getEmployeeByID(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.employeeRepository.findOneByID(id);
+            let employee = yield this.employeeRepository.findOneByID(id);
+            if (!employee) {
+                throw new http_exception_1.default(400, "Employee not found");
+            }
+            return employee;
         });
     }
-    createEmployee(name, email, age, address) {
+    createEmployee(name, email, age, address, password, role) {
         return __awaiter(this, void 0, void 0, function* () {
             const newAddress = new address_entity_1.default();
             newAddress.line1 = address.line1;
@@ -38,6 +49,8 @@ class EmployeeService {
             e.email = email;
             e.age = age;
             e.address = newAddress;
+            e.password = yield bcrypt_1.default.hash(password, 10);
+            e.role = role;
             return this.employeeRepository.create(e);
         });
     }
@@ -48,7 +61,7 @@ class EmployeeService {
             yield this.employeeRepository.remove(e);
         });
     }
-    updateEmployee(id, name, email, age, address) {
+    updateEmployee(id, name, email, age, address, password, role) {
         return __awaiter(this, void 0, void 0, function* () {
             const existingEmployee = yield this.employeeRepository.findOneByID(id);
             if (existingEmployee) {
@@ -60,6 +73,8 @@ class EmployeeService {
                 e.email = email;
                 e.age = age;
                 e.address = newAddress;
+                e.password = yield bcrypt_1.default.hash(password, 10);
+                e.role = role;
                 yield this.employeeRepository.update(id, e);
             }
         });
