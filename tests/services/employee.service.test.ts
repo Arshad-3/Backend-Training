@@ -4,10 +4,14 @@ import EmployeeRepository from "../../repositories/employee.repository";
 import EmployeeService from "../../services/employee.service";
 import Employee from "../../entities/employee.entity";
 import Address from "../../entities/address.entity";
+import DepartmentRepository from "../../repositories/department.repository";
+import { departmentRepository } from "../../routes/department.route";
 
 describe("EmployeeService", () => {
     let employeeRepository: MockProxy<EmployeeRepository>;
     let employeeService: EmployeeService;
+    let departmentRepository: MockProxy<DepartmentRepository>;
+
 
     beforeEach(() => {
         employeeRepository = mock<EmployeeRepository>();
@@ -23,6 +27,7 @@ describe("EmployeeService", () => {
             e.email="email@gmail.com"
             e.age = 25
             e.password = "password"
+            
             when(employeeRepository.findOneByID).calledWith(1).mockReturnValue(e)
             //Act
             const result = await employeeService.getEmployeeByID(1)
@@ -39,6 +44,5 @@ describe("EmployeeService", () => {
             //Assert
             expect(employeeRepository.findOneByID).toHaveBeenCalledWith(2)
         })
-
     });
 });

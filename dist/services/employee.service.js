@@ -117,6 +117,7 @@ class EmployeeService {
             }
             existingEmployee.department = dep;
             yield this.employeeRepository.update(id, existingEmployee);
+            this.logger.info("employee updated");
         });
     }
     updateEmployeeDepartment(id, department) {

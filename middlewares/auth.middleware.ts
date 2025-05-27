@@ -6,7 +6,6 @@ import { EmployeeRole } from "../entities/employee.entity";
 
 
 const authMiddleware = (req:Request,res:Response,next:NextFunction) => {
-    console.log("inside midleware hello world")
     const token = req.headers.authorization
     if(!token) {
         throw new httpException(401,"unauthorized")

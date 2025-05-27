@@ -4,13 +4,16 @@ import httpException from "../exceptions/http.exception";
 import EmployeeService from "./employee.service";
 import bcrypt from "bcrypt";
 import { JWT_SECRET, JWT_VALIDITY } from "../utils/constants";
+import { LoggerService } from "./logger.service";
 
 class AuthService {
+    private logger = LoggerService.getInstance(AuthService.name)
     constructor(private employeeService: EmployeeService) {}
 
     async login(email: string, password: string) {
         const employee = await this.employeeService.getEmployeeByEmail(email);
         if (!employee) {
+            this.logger.error("No such user")
             throw new httpException(404, "No such user");
         }
         const isPasswordValid = await bcrypt.compare(
@@ -18,6 +21,7 @@ class AuthService {
             employee.password
         );
         if (!isPasswordValid) {
+            this.logger.error("Invalid Password")
             throw new httpException(400, "Invalid Password");
         }
 
@@ -30,6 +34,7 @@ class AuthService {
         const token = jwt.sign(payload, JWT_SECRET, {
             expiresIn: JWT_VALIDITY,
         });
+        this.logger.info("Login colpleted")
         return {
             tokenType: "Bearer",
             accessToken: token,

@@ -43,7 +43,7 @@ class DepartmentController {
                     throw new http_exception_1.default(400, "department not found");
                 }
                 const employees = department.employees;
-                res.status(200).send(employees);
+                res.status(200).send(department);
             }
             catch (err) {
                 next(err);

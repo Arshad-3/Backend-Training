@@ -29,6 +29,7 @@ class DepartmentService {
             this.logger.error("department not found")
             throw new httpException(400,"department not found")
         }
+        this.logger.info("department returned")
         return this.departmentRepository.findOneByID(id)
     }
 

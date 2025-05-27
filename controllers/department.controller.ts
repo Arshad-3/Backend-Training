@@ -12,7 +12,7 @@ import {Request, Response, NextFunction} from 'express'
 class DepartmentController {
     constructor(private departmentService : DepartmentService , router : Router){
         router.get("/", this.getAllDepartments.bind(this))
-        router.get("/:id", this.getEmployeesByDepartmentID.bind(this))
+        router.get("/:id", this.getDepartmentByID.bind(this))
         router.post("/" ,checkRole([EmployeeRole.HR]), this.createDepartment.bind(this))
         router.post("/:id",checkRole([EmployeeRole.HR]), this.addEmployee.bind(this))
         router.delete("/:id" ,checkRole([EmployeeRole.HR]), this.deleteDepartment.bind(this))
@@ -25,14 +25,13 @@ class DepartmentController {
         res.status(200).send(departments)
     }
 
-    async getEmployeesByDepartmentID (req:Request,res:Response,next:NextFunction) {
+    async getDepartmentByID (req:Request,res:Response,next:NextFunction) {
         try{
             const department = await this.departmentService.getEmployeesByDepartmentID(Number(req.params.id))
             if(!department){
                 throw new httpException(400,"department not found")
             }
-            const employees:Employee[] = department.employees
-            res.status(200).send(employees)
+            res.status(200).send(department)
         }catch(err){
             next(err)
         }
