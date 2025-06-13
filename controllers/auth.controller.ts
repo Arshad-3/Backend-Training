@@ -11,6 +11,7 @@ class AuthController{
     async authenticateEmployee(req,res,next:NextFunction) {
         try{
             const {email,password} = req.body
+            console.log("request", req.body)
             if(!email || !password) {
                 throw new httpException(400, "Email or password is blank")
             }

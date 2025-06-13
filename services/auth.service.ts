@@ -38,6 +38,7 @@ class AuthService {
         return {
             tokenType: "Bearer",
             accessToken: token,
+            user: employee.id
         };
     }
 }

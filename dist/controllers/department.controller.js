@@ -22,7 +22,7 @@ class DepartmentController {
     constructor(departmentService, router) {
         this.departmentService = departmentService;
         router.get("/", this.getAllDepartments.bind(this));
-        router.get("/:id", this.getEmployeesByDepartmentID.bind(this));
+        router.get("/:id", this.getDepartmentByID.bind(this));
         router.post("/", (0, authorization_middleware_1.checkRole)([employee_entity_1.EmployeeRole.HR]), this.createDepartment.bind(this));
         router.post("/:id", (0, authorization_middleware_1.checkRole)([employee_entity_1.EmployeeRole.HR]), this.addEmployee.bind(this));
         router.delete("/:id", (0, authorization_middleware_1.checkRole)([employee_entity_1.EmployeeRole.HR]), this.deleteDepartment.bind(this));
@@ -35,14 +35,13 @@ class DepartmentController {
             res.status(200).send(departments);
         });
     }
-    getEmployeesByDepartmentID(req, res, next) {
+    getDepartmentByID(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const department = yield this.departmentService.getEmployeesByDepartmentID(Number(req.params.id));
+                const department = yield this.departmentService.getDepartmentByID(Number(req.params.id));
                 if (!department) {
                     throw new http_exception_1.default(400, "department not found");
                 }
-                const employees = department.employees;
                 res.status(200).send(department);
             }
             catch (err) {

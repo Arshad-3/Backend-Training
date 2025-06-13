@@ -36,13 +36,14 @@ class DepartmentService {
             return this.departmentRepository.findAll();
         });
     }
-    getEmployeesByDepartmentID(id) {
+    getDepartmentByID(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const existingDepartment = yield this.departmentRepository.findOneByID(id);
             if (!existingDepartment) {
                 this.logger.error("department not found");
                 throw new http_exception_1.default(400, "department not found");
             }
+            this.logger.info("department returned");
             return this.departmentRepository.findOneByID(id);
         });
     }

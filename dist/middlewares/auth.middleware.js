@@ -7,7 +7,6 @@ const http_exception_1 = __importDefault(require("../exceptions/http.exception")
 const constants_1 = require("../utils/constants");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authMiddleware = (req, res, next) => {
-    console.log("inside midleware hello world");
     const token = req.headers.authorization;
     if (!token) {
         throw new http_exception_1.default(401, "unauthorized");

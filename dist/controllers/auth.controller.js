@@ -23,6 +23,7 @@ class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { email, password } = req.body;
+                console.log("request", req.body);
                 if (!email || !password) {
                     throw new http_exception_1.default(400, "Email or password is blank");
                 }

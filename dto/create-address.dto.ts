@@ -6,7 +6,7 @@ export class CreateAddressDto {
   line2: string;
 
   @IsNotEmpty()
-  house_no: string
+  houseNo: string
 
   @IsNotEmpty()
   line1: string;

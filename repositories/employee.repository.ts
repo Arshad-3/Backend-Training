@@ -22,7 +22,7 @@ class EmployeeRepository {
     }
 
     async findOneByID(id: number): Promise<Employee> {
-        return this.repository.findOne({where : {id},relations:{address:true}});
+        return this.repository.findOne({where : {id},relations:{address:true,department:true}});
     }
 
     async update (id:number , employee : Employee) : Promise<void> {

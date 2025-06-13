@@ -23,7 +23,7 @@ class DepartmentService {
         return this.departmentRepository.findAll()
     }
 
-    async getEmployeesByDepartmentID (id:number) : Promise<Department> {
+    async getDepartmentByID (id:number) : Promise<Department> {
         const existingDepartment = await this.departmentRepository.findOneByID(id)
         if(!existingDepartment) {
             this.logger.error("department not found")

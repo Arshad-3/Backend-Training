@@ -35,7 +35,7 @@ class EmployeeRepository {
     }
     findOneByID(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.repository.findOne({ where: { id }, relations: { address: true } });
+            return this.repository.findOne({ where: { id }, relations: { address: true, department: true } });
         });
     }
     update(id, employee) {

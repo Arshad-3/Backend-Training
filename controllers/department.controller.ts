@@ -27,7 +27,7 @@ class DepartmentController {
 
     async getDepartmentByID (req:Request,res:Response,next:NextFunction) {
         try{
-            const department = await this.departmentService.getEmployeesByDepartmentID(Number(req.params.id))
+            const department = await this.departmentService.getDepartmentByID(Number(req.params.id))
             if(!department){
                 throw new httpException(400,"department not found")
             }

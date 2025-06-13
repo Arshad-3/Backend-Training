@@ -21,7 +21,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateAddressDto.prototype, "house_no", void 0);
+], CreateAddressDto.prototype, "houseNo", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)

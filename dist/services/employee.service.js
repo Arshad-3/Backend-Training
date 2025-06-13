@@ -54,7 +54,7 @@ class EmployeeService {
     createEmployee(name, email, age, address, password, role, employeeID, experience, joiningDate, status, department_id) {
         return __awaiter(this, void 0, void 0, function* () {
             const newAddress = new address_entity_1.default();
-            newAddress.houseNo = address.house_no;
+            newAddress.houseNo = address.houseNo;
             newAddress.line2 = address.line2;
             newAddress.line1 = address.line1;
             newAddress.pincode = address.pincode;
@@ -100,7 +100,7 @@ class EmployeeService {
             existingEmployee.name = name;
             existingEmployee.email = email;
             existingEmployee.age = age;
-            existingEmployee.address.houseNo = address.house_no;
+            existingEmployee.address.houseNo = address.houseNo;
             existingEmployee.address.line1 = address.line1;
             existingEmployee.address.line2 = address.line2;
             existingEmployee.address.pincode = address.pincode;
